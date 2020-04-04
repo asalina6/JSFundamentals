@@ -103,3 +103,66 @@ console.log(n.toExponential(4)); //This shows value in exponential form with 4 d
 console.log(n.toPrecision(4)); //  Returns a number. It'll look at 4 digits behind decimal, then return the rounded digit version. 
 console.log( "1".padStart(4,"*")); //For fun, showing off padstart.
 
+//MOST IMPORANT PART I THINK - Objects to Primitive Conversion
+
+//object -> boolean, all objects are true, even for new Boolean(false). 
+
+//Before we move on, all objects have two methods. ToString() and valueOf().
+//toStrings: objects prints [object Ojbect], arrays prints out values with commas, regex prints out regex code, function prints out the function code, date prints out readable date
+//valueOf: each wrapper has a valueOf that will return a primitive. objects, regex, arrays just return the code. Date returns epoch. function returns [function] (similar to objects tostring) 
+var x = {a:1};
+var y = [1,2,3];
+var z = /hello/g;
+var a = new Date();
+var f = function(){var inside = "this is a function"; return inside;};
+
+console.log("x's toString():", x.toString(), "x's valueOf():", x.valueOf());
+console.log("y's toString():", y.toString(), "y's valueOf():", y.valueOf());
+console.log("z's toString():", z.toString(), "z's valueOf():", z.valueOf());
+console.log("a's toString():", a.toString(), "a's valueOf():", a.valueOf());
+console.log("f's toString():", f.toString(), "f's valueOf():", f.valueOf());
+
+
+//Object -> String steps:
+// 1.) If object has toString(), call it. if it returns a primitive value, Javascript converts value to a string. 
+var n = new Number(1);
+console.log("n's toString():", n.toString());
+console.log("Converting n to a string:", n+"", typeof(n+""));
+//2.) If an object has noString() method , OR IF THE METHOD DOES NOT RETURN A PRIMITIVE, then JS looks for valueOf() method. If valueOf is primitive, it converts it to a string. 
+//Note, most objects have a toString.
+//3.) finally, if both fail, JS will throw a type error when you try to convert it to a string.
+
+var counterexample = Object.create(null);   //This does not have a toString method at all, nor a valueOf. This will throw a typeerror when trying to convert to a string.
+
+//Object -> Number
+//1.) call ValueOf() for the PRIMITIVE value (if it is not primitive, then go to step 2), then convert the primitive to a number.
+//2.) call toString() that returns a primtive value and converts it to a number.
+//3.) Else, throw type error
+
+//So trying to convert an array to a number...
+var emptyarray = [];
+var singleArray = [10];
+
+//Note, since array.valueOf returns an object, it switches to toString(). 
+//Then emptyarray.toString() = "", and "" is 0 in numbers
+//singearray.toString() = "10", and "10" is 10.
+//y.toString() = "1,2,3,4", and that does not convert to a number, so NaN. 
+
+console.log("Empty array's valueOf:", emptyarray.valueOf());
+console.log("Converting emptyarray to number:", +emptyarray);
+console.log("single array's valueOf:", singleArray.valueOf());
+console.log("Converting single to number:", +singleArray);
+console.log("y array's valueOf:", y.valueOf());
+console.log("Converting y to number:", +y); //Tried converting a string to a number, which resulted in NaN
+
+//When using +, ==, there is a special object-->primitive method
+
+//1) object -> number method if non-date object, else object->string for date.
+//2.) NOTE that it does not actually convert to a number or string, but returns the original primitive. 
+
+//When using <,>,<=,>=, uses object-primitve method where 1.) object->number method (but does not convert primitive) then object-string method (but does not convert primtiive)
+
+//Talks more about block scope (none in ES3), hoisitng, and variable scope.
+
+//Remember scope chain is where the variable is located lexically (initialized by "variable resolution"),
+// while prototype chain is where the property of an object is located in memory. 
