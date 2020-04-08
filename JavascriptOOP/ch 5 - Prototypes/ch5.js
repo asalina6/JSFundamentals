@@ -163,6 +163,10 @@ console.log(benji.say(),rusty.say());
 console.log(benji.constructor,rusty.constructor);
 //the constructor of the prototype is Dog for some odd reason, it should be Object
 console.log(benji.constructor.prototype.constructor);
+
+//We prove that it is not really dog, because:
+console.log(benji.constructor.prototype.tail); //undefined
+
 Dog.prototype = {paws:4,hair:true};
 
 //The old objects do not get access to the new prototype. They have a link to the old object
@@ -178,3 +182,7 @@ console.log(lucy.constructor,benji.constructor);
 //prototype of the constructor is really confusing
 console.log(lucy.constructor.prototype,benji.constructor.prototype); 
 //For the old object, the prototype is the new prototype, but the old object can't access it
+
+
+//The solution, fix the constructor property of the prototype.
+Dog.prototype.constructor  = Dog;
