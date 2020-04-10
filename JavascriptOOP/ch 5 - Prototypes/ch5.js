@@ -167,7 +167,7 @@ console.log(benji.constructor.prototype.constructor);
 //We prove that it is not really dog, because:
 console.log(benji.constructor.prototype.tail); //undefined
 
-Dog.prototype = {paws:4,hair:true};
+Dog.prototype = {paws:4,hair:true};  //When this occurs, all new Dog types will then be of Constructor Object (and not Dog).
 
 //The old objects do not get access to the new prototype. They have a link to the old object
 console.log(benji.paws);
