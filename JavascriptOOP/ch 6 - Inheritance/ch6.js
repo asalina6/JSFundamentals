@@ -92,9 +92,78 @@ Triangle3.prototype = TwoDShape3.prototype;
 Triangle3.prototype.constructor = Triangle3;
 //This reduces a 4 step process to two steps
 
-//SIDE EFFECT: when a child modifies a prototype, the parent and siblings ge tthe changes
+//SIDE EFFECT: when a child modifies a prototype, the parent and siblings getthe changes
 Triangle3.prototype.name = 'Triangle';
 console.log(new Shape3().name); //Shape now has a name of triangle....
 
 
+//We want to not use new objects, but also want to have prototypical inheritance where child does not affect parent...solution:
+
 //Temporary Constructor - new F()
+
+function Shape4(){};
+Shape4.prototype.name = 'shape';
+Shape4.prototype.toString = function(){return this.name};
+
+function TwoDShape4(){};
+//take care of inheritance
+var F = function(){};
+F.prototype = Shape4.prototype;
+TwoDShape4.prototype = new F();
+TwoDShape4.prototype.constructor = TwoDShape4;
+//augmenting...
+TwoDShape4.prototype.name = '2DShape';
+
+function Triangle4(side,height){
+    this.side = side;
+    this.height = height;
+}
+
+var F = function(){};
+F.prototype = TwoDShape4.prototype;
+Triangle4.prototype = new F();
+Triangle4.prototype.constructor = Triangle4;
+//augment
+Triangle4.prototype.name = "Triangle";
+Triangle.prototype.getArea = function(){return this.side * this.height / 2;};
+
+//we keep prototype chain in place and parent's properties aren't overwritten by children.
+//Properites and methods added to the proptotypes should be inhereited, make sure to separate own porperties
+
+//UBER - Access to Parent from child (Super)
+//Set uber to parent's prototype
+//I KNOW OF A DIFFERENT WAY USING CALL...
+
+function Shape5(){}
+Shape.prototype.name = 'Shape';
+Shape.prototype.toString = function(){
+    var result = [];
+    if(this.constructor.uber){
+        result[result.length] = this.constructor.uber.toString();
+    }
+    result[result.length] = this.name;
+    return result.join(', ');
+};
+
+function TwoDShape5(){};
+var F = function(){};
+F.prototype = Shape5.prototype;
+TwoDShape5.prototype = new F();
+TwoDShape5.prototype.constructor = TwoDShape5;
+TwoDShape5.uber = Shape5.prototype;
+//augmenting...
+TwoDShape5.prototype.name = '2DShape';
+
+function Triangle5(side,height){
+    this.side = side;
+    this.height = height;
+}
+
+var F = function(){};
+F.prototype = TwoDShape5.prototype;
+Triangle5.prototype = new F();
+Triangle5.prototype.constructor = Triangle5;
+Triangle.uber = TwoDShape5.prototype;
+//augment
+Triangle4.prototype.name = "Triangle";
+Triangle.prototype.getArea = function(){return this.side * this.height / 2;};

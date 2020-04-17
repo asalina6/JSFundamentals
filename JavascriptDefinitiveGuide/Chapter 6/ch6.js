@@ -411,3 +411,65 @@ console.log(p.isPrototypeOf(myConstructor));
 
 //prototypeof vs instanceof
 //object instanceof function, object prototype chain is checked against function.prototype, not function itself
+
+
+//2.) class attribute
+//This is before ES6. To get class data, you need to use Object.toString() and get the last words
+function classOf(o){
+    if(o === null){
+        return "Null";
+    }
+    if(o === undefined){
+        return "Undefined";
+    }
+    return Object.prototype.toString.call(o).slice(8,-1);
+}
+
+//The above will print out a class. 
+//A clever way I've seen it performed is as follows (true false)
+function isArray(arr){
+    flag = false;
+    if(Object.prototype.toString.call(arr).includes("Array")){
+        flag = true;
+    }
+    return flag;
+}
+console.log(Object.prototype.toString.call([1,2,3]));
+
+//Any object created with Object.create(), {object literal}, or a constructed object with "new" will have a class of Object
+
+
+//3.) Extensible Attribute
+//Whether new properties can be added to an object or not. 
+
+//checks whether it is or isn't extensible
+Object.isExtensible(x);
+
+//Prevents extensions (not undoable) of own properties. You can add properties to prototypesmo
+Object.preventExtensions(x);
+
+//Stronger than preventExtneisions, Object.seal() makes properties nonconfigurable. This action is undoable.
+//However existing properties that are writable can still be set.
+Object.seal(x);
+Object.isSealed(x);
+
+//Finally, the strongest is freeze. It locks down objects more tightly. Non extensible, nonconfigurable, and read-only
+//However if there are accessor properties with set, it ican still be used.
+Object.freeze(x);
+Object.isFrozen(x);
+
+//AGAIN, these only affect main object. You need to modify prototype as well to stop it.
+
+//You can nest them
+var o = Object.seasl(Object.create(Object.freeze({x:1}),{y: {value:2,writable:true}));
+
+
+//Serializations - JSON
+
+//Objects, arrays, strings, finite numbers, true, false, and null are supported.
+//NaN, Inf, -Inf are set to null.
+//functions are not supported for JSON.stringify() or JSON.parse
+
+//JSON.stringify only affects enumerables
+
+//Object methods - toString(), toLocaleString(), toJSON()  [this is what stringify looks for],  valueOf()
